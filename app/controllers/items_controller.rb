@@ -4,7 +4,6 @@ class ItemsController < ApplicationController
 
         def index
         @items=Item.all
-            render body: @items.map {|i| "#{i.name}:#{i.price}:"}
         end
 
         def create 
@@ -15,6 +14,21 @@ class ItemsController < ApplicationController
                 render json: item.errors, status: :unprocessable_entity
         end
     end
+
+    def show
+        unless (@item = Item.where(id: params[:id]).first)
+            render body: 'Page not found', status: 404
+         end
+end
+
+    def edit; end
+
+    def new; end
+
+    def update; end
+
+    def destroy; end
+
         private
 
         def items_params
