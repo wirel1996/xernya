@@ -4,9 +4,9 @@
 
 <% @items.each do |item| %>
    <ul>
-    <li><%= link_to item.name, item_path(item)  %></li>
-    <li><%= item.price %></li>
-    <li><%= item.description %></li>
+    <li>Имя:  <%= link_to item.name, item_path(item)  %></li>
+    <li>Цена: <%= item.price %></li>
+    <li>Описание: <%= item.description %></li>
     <li><%= button_to 'delete', item_path(item), method: :delete %></li>
     </ul>    
 <% end  %>
