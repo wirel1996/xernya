@@ -1,47 +1,54 @@
 class ItemsController < ApplicationController
-        layout false
         skip_before_action :verify_authenticity_token
         before_action :find_item, only: %i[show edit update destroy upvote]
-        before_action :admin?, only: %i[edit update new create destroy]
+        before_action :admin?, only: %i[edit]
         after_action :show_info, only: %i[index]
 
         def index
-        @items=Item.all
+            @items = Item
+            @items = @items.where('price >= ?', params[:price_from])    if params[:price_from]
+            @items = @items.where('created_at >= ?', 1.day.ago)         if params[:today]
+            @items = @items.where('votes_count >= ?', params[:votes_from]) if params[:votes_from]
+            @items = @items.order(:id)
+            @items = @items.includes(:image)
         end
 
         def create 
-            item = Item.create(items_params)
-            if item.persisted?
+            @item = Item.create(items_params)
+            if @item.persisted?
+                flash[:success] = "Item was saved"
                 redirect_to items_path
             else
-                render json: item.errors, status: :unprocessable_entity
+                flash.now[:error] = "Please fill all fileds correctly"
+                render :new
         end
     end
 
-    def show
-            render body: 'Page not found', status: 404 unless @item
-         end
+    def show; end
 
-    def edit
-        render body: 'Page not found', status: 404 unless @item
-        end
-
-    def new; end
+    #def edit; end
+    def new
+        @item = Item.new
+    end
 
     def update
         if @item.update(items_params)
+            flash[:success] = "Item was updated"
             redirect_to items_path
             else
-                render json: @item.errors, status: :unprocessable_entity
+                flash.now[:error] = "Please fill all fileds correctly"
+                render json: item.errors, status: :unprocessable_entity
             end       
     end
 
 
     def destroy
        if @item.destroy.destroyed?
+        flash[:success] = "Item was deleted"
         redirect_to items_path
        else
-        render json: @item.errors, status: :unprocessable_entity
+        flash[:error] = "Item wasn't deleted"
+        render json: item.errors, status: :unprocessable_entity
        end
      end
 
@@ -58,17 +65,13 @@ class ItemsController < ApplicationController
         private
 
         def items_params
-            params.permit(:name, :price, :real, :weight,
+            params.require(:item).permit(:name, :price, :real, :weight,
             :description )
         end
 
         def find_item
             @item = Item.where(id: params[:id]).first
-        end
-
-        def admin?
-            true
-            #render json:'Access denied', status: :forbidden unless params[:admin]
+            render_404 unless @item
         end
 
         def show_info

@@ -10,11 +10,20 @@ gem "stimulus-rails"
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
 gem "bootsnap", require: false
+gem "haml-rails"
+#gem "bootstrap", '~> 5.2'
+gem 'simple_form'
+gem "bootstrap-sass"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ], require: "debug/prelude"
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
+  gem "rspec-rails"
+  gem 'pry'
+  gem 'sassc-rails'
+  gem 'factory_bot'
+  gem 'rails-controller-testing'
 end
 
 group :development do
@@ -25,4 +34,8 @@ end
 group :test do
   gem "capybara"
   gem "selenium-webdriver"
+  gem "shoulda-matchers"
+  gem "webdrivers"
 end
+
+gem "webpacker", "~> 5.4"
