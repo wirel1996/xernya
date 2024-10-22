@@ -14,7 +14,7 @@ gem "haml-rails"
 #gem "bootstrap", '~> 5.2'
 gem 'simple_form'
 gem "bootstrap-sass"
-
+gem 'faker', "~> 3.5.1"
 group :development, :test do
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ], require: "debug/prelude"
   gem "brakeman", require: false
