@@ -6,14 +6,14 @@ class ItemsController < ApplicationController
 
         def index
             @items = Item
-            @items = @items.where('price >= ?', params[:price_from])    if params[:price_from]
-            @items = @items.where('created_at >= ?', 1.day.ago)         if params[:today]
-            @items = @items.where('votes_count >= ?', params[:votes_from]) if params[:votes_from]
+            @items = @items.where("price >= ?", params[:price_from])    if params[:price_from]
+            @items = @items.where("created_at >= ?", 1.day.ago)         if params[:today]
+            @items = @items.where("votes_count >= ?", params[:votes_from]) if params[:votes_from]
             @items = @items.order(:id)
             @items = @items.includes(:image)
         end
 
-        def create 
+        def create
             @item = Item.create(items_params)
             if @item.persisted?
                 flash[:success] = "Item was saved"
@@ -21,12 +21,12 @@ class ItemsController < ApplicationController
             else
                 flash.now[:error] = "Please fill all fileds correctly"
                 render :new
-        end
+            end
     end
 
     def show; end
 
-    #def edit; end
+    # def edit; end
     def new
         @item = Item.new
     end
@@ -35,17 +35,16 @@ class ItemsController < ApplicationController
         if @item.update(items_params)
             flash[:success] = "Item was updated"
             redirect_to items_path
-            else
+        else
                 flash.now[:error] = "Please fill all fileds correctly"
                 render json: item.errors, status: :unprocessable_entity
-            end       
+        end
     end
-
 
     def destroy
        if @item.destroy.destroyed?
         flash[:success] = "Item was deleted"
-        redirect_to items_path
+        render json: { success: true }
        else
         flash[:error] = "Item wasn't deleted"
         render json: item.errors, status: :unprocessable_entity
@@ -55,18 +54,16 @@ class ItemsController < ApplicationController
      def upvote
         @item.increment!(:votes_count)
         redirect_to items_path
-
      end
-     
      def expensive
-        @items = Item.where('price > 50')
+        @items = Item.where("price > 50")
         render :index
      end
         private
 
         def items_params
             params.require(:item).permit(:name, :price, :real, :weight,
-            :description )
+            :description)
         end
 
         def find_item
@@ -75,7 +72,6 @@ class ItemsController < ApplicationController
         end
 
         def show_info
-            puts 'Index edpoint'
+            puts "Index edpoint"
         end
-        
-    end
+end

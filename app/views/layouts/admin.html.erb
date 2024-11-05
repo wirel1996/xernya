@@ -1,28 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= content_for(:title) || "Rails Course" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title>RailsCourse</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%= yield :head %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-links-track': 'reload' %>
+  <%= javascript_pack_tag 'application', 'data-turbo-links-track': 'reload' %>
+</head>
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  </head>
+<body>
+  <div class="jumbotron vertical-center">
+    <div class="container">
+      <h2 style="color: #B00010;">Admin Panel</h2>
+      <%= yield %>
+      <%= render partial: 'shared/email' %>
+    </div>
+  </div>
+</body>
 
-  <body>
-    <h2 style="color: #B00100;">Admin panel </h2>
-    <%= yield %>
-  </body>
-
-  <footer>
-  <p>По всем вопросам пишиье на почту: wirel1996@mail.ru</p>
-  </footer>
-  </html>
+</html>
 
